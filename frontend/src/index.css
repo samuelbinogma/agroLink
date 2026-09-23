@@ -1,0 +1,68 @@
+/**
+ * index.css — global styles + design tokens.
+ *
+ * CSS variables (:root) = the single source of truth for colors and fonts.
+ * Every component reads from here, so changing one green here re-themes
+ * the whole app — try it later!
+ */
+:root {
+  /* Brand greens */
+  --color-primary: #16a34a;
+  --color-primary-dark: #15803d;
+  --color-primary-soft: #f0fdf4;
+
+  /* Neutrals */
+  --color-white: #ffffff;
+  --color-dark: #14532d;
+  --color-text: #111827;
+  --color-text-muted: #6b7280;
+  --color-text-light: #f9fafb;
+  --color-border: #e5e7eb;
+
+  /* Fonts */
+  --font-sans: system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background: var(--color-white);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--color-primary);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+#root {
+  min-height: 100vh;
+}

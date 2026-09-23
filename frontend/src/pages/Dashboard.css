@@ -1,0 +1,17 @@
+/* Dashboard.css — shared by the two placeholder dashboards */
+.dashboard {
+  max-width: 720px;
+  margin: 3rem auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.dashboard h1 {
+  color: var(--color-text);
+  margin-bottom: 1rem;
+}
+
+.dashboard__note {
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
