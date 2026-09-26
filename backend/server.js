@@ -19,6 +19,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
+const authRoutes = require('./routes/authRoutes');
 
 // Load variables from .env into process.env BEFORE anything uses them.
 dotenv.config();
@@ -43,6 +44,9 @@ app.use(express.json());
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'AgroLink API is running', time: new Date().toISOString() });
 });
+
+// Feature 2: authentication endpoints (register, OTP, login, me).
+app.use('/api/auth', authRoutes);
 
 // ---- 404 fallback for unknown API routes ----
 app.use('/api', (req, res) => {

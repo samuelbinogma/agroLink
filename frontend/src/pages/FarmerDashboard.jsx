@@ -1,17 +1,20 @@
 /**
- * FarmerDashboard.jsx — placeholder.
- * Real implementation comes in Feature 3 (role-based access) when farmers
- * can log in. This stub proves the route + navigation work for now.
+ * FarmerDashboard.jsx — placeholder until Feature 3.
+ * Now it greets the logged-in farmer, proving the JWT + /me pipeline works.
+ * Feature 3 will protect this route and only allow role === 'farmer'.
  */
+import { useAuth } from '../context/AuthContext'
 import './Dashboard.css'
 
 function FarmerDashboard() {
+  const { user } = useAuth()
+
   return (
     <div className="dashboard">
-      <h1>Farmer Dashboard</h1>
+      <h1>{user ? `Welcome to your farm, ${user.name}` : 'Farmer Dashboard'}</h1>
       <p className="dashboard__note">
-        This is a placeholder. After we build authentication, farmers will log
-        in here to manage their products, orders and messages.
+        This is a placeholder. In Feature 4 you'll upload and manage your
+        products here.
       </p>
     </div>
   )

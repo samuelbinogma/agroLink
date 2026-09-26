@@ -1,19 +1,12 @@
-/**
- * Layout.jsx — shared page shell.
- * Renders a Header (logo + nav), the page content (the <main> children),
- * and a Footer. Because App.jsx wraps every route in <Layout>, this shell
- * appears on all pages automatically.
- *
- * Notice the pattern: props.children. In App.jsx we wrote
- *   <Layout>
- *     <Home />
- *   </Layout>
- * so React passes <Home /> as `children`, which we drop inside <main>.
- */
 import { NavLink, Link } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import './Layout.css'
 
 function Layout({ children }) {
+  // Auth state powers the right side of the navbar:
+  // logged out = Log in / Register links; logged in = name + role + Logout.
+  const { user, logout } = useAuth()
+
   return (
     <div className="layout">
       <header className="navbar">
@@ -35,10 +28,28 @@ function Layout({ children }) {
 
         <nav className="navbar__links">
           <NavLink to="/" end>Home</NavLink>
-          <NavLink to="/farmer/dashboard" end>Farmer</NavLink>
-          <NavLink to="/customer/dashboard" end>Customer</NavLink>
+          {user ? (
+            <>
+              <NavLink to={user.role === 'farmer' ? '/farmer/dashboard' : '/customer/dashboard'} end>
+                {user.role === 'farmer' ? 'My Farm' : 'My Market'}
+              </NavLink>
+              <button className="navbar__logout" onClick={logout}>Logout</button>
+            </>
+          ) : (
+            <>
+              <NavLink to="/login" end>Log in</NavLink>
+              <NavLink to="/register" end className="navbar__register">Sign up</NavLink>
+            </>
+          )}
         </nav>
       </header>
+
+      {/* Tiny status line when logged in */}
+      {user && (
+        <div className="navbar__userline">
+          Logged in as <strong>{user.name}</strong> ({user.role}){user.isVerified ? '' : ' — verify your account'}
+        </div>
+      )}
 
       <main className="layout__main">{children}</main>
 

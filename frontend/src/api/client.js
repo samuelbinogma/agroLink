@@ -1,11 +1,12 @@
 /**
  * client.js — a single, reusable Axios instance.
  *
- * Why a shared instance instead of calling axios.get(...) everywhere?
- *   1. baseURL('/api') + the Vite proxy (vite.config.js) means we write
- *      `api.get('/health')` and never hardcode http://localhost:5000.
- *   2. Later (Feature 2 JWT auth) we add ONE interceptor here that attaches
- *      the token to every request — no changes needed in individual pages.
+ * The request INTERCEPTOR is why we built a shared client:
+ * it reads the saved JWT from localStorage ONCE and attaches it to every
+ * outgoing request. Individual pages never touch tokens.
+ *
+ * On 401 responses we drop the stale token so a logged-out UI can't
+ * keep firing authenticated calls (the AuthContext listens for logout).
  */
 import axios from 'axios'
 
@@ -15,5 +16,25 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
 })
+
+// ---- Attach token to every request (if we have one) ----
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('agrolink_token')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
+})
+
+// ---- React to 401s: token is gone/expired -> clear it ----
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('agrolink_token')
+    }
+    return Promise.reject(error)
+  }
+)
 
 export default api
